@@ -63,10 +63,10 @@ public abstract class ContactDao {
 
 
     @Transaction
-    public List<PdssSyncData> getPdssSyncDataList(Supplier<List<DeviceContact>> supplier, Function<String, List<String>> toolFunc) {
+    public List<PdssSyncData> getPdssSyncDataList(List<DeviceContact> deviceContactList, Function<String, List<String>> toolFunc) {
         Log.i(TAG, "getPdssSyncDataList");
         long updateTimestamp = System.currentTimeMillis();
-        List<DeviceContact> deviceContactList = supplier.get();
+//        List<DeviceContact> deviceContactList = supplier.get();
 
         //Check Deleted Contact
         int[] ids = getSavedContactIds();

@@ -35,33 +35,28 @@ public class PdssRoomDatabaseTest {
 
         //init Add
         Log.d(TAG,"init add contact");
-        List<PdssSyncData> ret = dao.getPdssSyncDataList(() -> {
-            ArrayList<DeviceContact> list = new ArrayList<>();
-            list.add(new DummyContact(1, "A A", firstAddTs));
-            list.add(new DummyContact(2, "B B", firstAddTs));
-            list.add(new DummyContact(3, "A B C", firstAddTs));
-            return list;
-        }, this::genToolFunc);
+        ArrayList<DeviceContact> list = new ArrayList<>();
+        list.add(new DummyContact(1, "A A", firstAddTs));
+        list.add(new DummyContact(2, "B B", firstAddTs));
+        list.add(new DummyContact(3, "A B C", firstAddTs));
+
+        List<PdssSyncData> ret = dao.getPdssSyncDataList(list, this::genToolFunc);
 
         ret.forEach(d -> Log.d(TAG, d.toString()));
 
 
         Log.d(TAG,"removed 'B B', 'A B C' ");
-        ret = dao.getPdssSyncDataList(() -> {
-            ArrayList<DeviceContact> list = new ArrayList<>();
-            list.add(new DummyContact(1, "A A", firstAddTs));
-            return list;
-        }, this::genToolFunc);
+        list = new ArrayList<>();
+        list.add(new DummyContact(1, "A A", firstAddTs));
+        ret = dao.getPdssSyncDataList(list, this::genToolFunc);
 
         ret.forEach(d -> Log.d(TAG, d.toString()));
 
 
         Log.d(TAG,"edit 'A A' to 'A B' ");
-        ret = dao.getPdssSyncDataList(() -> {
-            ArrayList<DeviceContact> list = new ArrayList<>();
-            list.add(new DummyContact(1, "A B", System.currentTimeMillis()));
-            return list;
-        }, this::genToolFunc);
+        list = new ArrayList<>();
+        list.add(new DummyContact(1, "A B", System.currentTimeMillis()));
+        ret = dao.getPdssSyncDataList(list, this::genToolFunc);
 
         ret.forEach(d -> Log.d(TAG, d.toString()));
 
@@ -72,22 +67,19 @@ public class PdssRoomDatabaseTest {
     public void testForeignKeyDelete() {
         //init Add
         Log.d(TAG,"init add contact");
-        List<PdssSyncData> ret = dao.getPdssSyncDataList(() -> {
-            ArrayList<DeviceContact> list = new ArrayList<>();
-            list.add(new DummyContact(1, "A A", 1));
-            list.add(new DummyContact(2, "B B", 1));
-            list.add(new DummyContact(3, "A B C", 1));
-            return list;
-        }, this::genToolFunc);
+        ArrayList<DeviceContact> list = new ArrayList<>();
+        list.add(new DummyContact(1, "A A", 1));
+        list.add(new DummyContact(2, "B B", 1));
+        list.add(new DummyContact(3, "A B C", 1));
+
+        List<PdssSyncData> ret = dao.getPdssSyncDataList(list, this::genToolFunc);
 
         ret.forEach(d -> Log.d(TAG, d.toString()));
 
         Log.d(TAG,"removed 'B B', 'A B C' ");
-        ret = dao.getPdssSyncDataList(() -> {
-            ArrayList<DeviceContact> list = new ArrayList<>();
-            list.add(new DummyContact(1, "A A", 2));
-            return list;
-        }, this::genToolFunc);
+        list = new ArrayList<>();
+        list.add(new DummyContact(1, "A A", 2));
+        ret = dao.getPdssSyncDataList(list, this::genToolFunc);
 
         ret.forEach(d -> Log.d(TAG, d.toString()));
 
@@ -100,15 +92,12 @@ public class PdssRoomDatabaseTest {
 
         long ts = System.currentTimeMillis();
         Log.d(TAG,"testLargeData");
-        List<PdssSyncData> ret = dao.getPdssSyncDataList(() -> {
-            ArrayList<DeviceContact> list = new ArrayList<>();
-            for(int i = 0; i < 1000; i++)
-                list.add(new DummyContact(i, "WHAT HI " + i, 1));
-            return list;
-        }, this::genToolFunc);
+        ArrayList<DeviceContact> list = new ArrayList<>();
+        for(int i = 0; i < 1000; i++)
+            list.add(new DummyContact(i, "WHAT HI " + i, 1));
+        List<PdssSyncData> ret = dao.getPdssSyncDataList(list, this::genToolFunc);
 
         Log.d(TAG, "testLargeData done :: " + ret.size() +", "+ (System.currentTimeMillis() - ts));
-        ret.forEach(s -> Log.d(TAG, s.toString()));
     }
 
     private List<String> genToolFunc(String inputString) {

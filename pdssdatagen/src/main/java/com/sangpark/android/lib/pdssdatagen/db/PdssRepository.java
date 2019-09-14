@@ -10,7 +10,6 @@ import com.sangpark.android.lib.pdssdatagen.data.PdssSyncData;
 import java.util.List;
 import java.util.concurrent.CompletableFuture;
 import java.util.function.Function;
-import java.util.function.Supplier;
 
 public class PdssRepository {
 
@@ -23,9 +22,9 @@ public class PdssRepository {
     }
 
     //TODO :: Make Not to work on MainThread.
-    public List<PdssSyncData> getSyncDataList(Supplier<List<DeviceContact>> supplier, Function<String, List<String>> toolFunc) {
+    public List<PdssSyncData> getSyncDataList(List<DeviceContact> deviceContactList, Function<String, List<String>> toolFunc) {
         Log.d(TAG, "getSyncDataList ");
-        return mContactDao.getPdssSyncDataList(supplier, toolFunc);
+        return mContactDao.getPdssSyncDataList(deviceContactList, toolFunc);
     }
 
     @VisibleForTesting
