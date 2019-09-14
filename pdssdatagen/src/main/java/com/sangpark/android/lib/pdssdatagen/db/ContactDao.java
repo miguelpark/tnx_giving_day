@@ -3,6 +3,7 @@ package com.sangpark.android.lib.pdssdatagen.db;
 import android.arch.persistence.room.Dao;
 import android.arch.persistence.room.Insert;
 import android.arch.persistence.room.Query;
+import android.arch.persistence.room.Transaction;
 import android.arch.persistence.room.Update;
 import android.support.annotation.VisibleForTesting;
 import android.util.Log;
@@ -61,6 +62,7 @@ public abstract class ContactDao {
     abstract List<PdssSyncDataImpl> getRemovedData();
 
 
+    @Transaction
     public List<PdssSyncData> getPdssSyncDataList(Supplier<List<DeviceContact>> supplier, Function<String, List<String>> toolFunc) {
         Log.i(TAG, "getPdssSyncDataList");
         long updateTimestamp = System.currentTimeMillis();
@@ -70,7 +72,7 @@ public abstract class ContactDao {
         int[] ids = getSavedContactIds();
         Arrays.stream(ids).forEach(id -> {
             if(!deviceContactList.stream().anyMatch(deviceContact -> deviceContact.getContactId() == id)) {
-                deleteContactPdss(id);
+                deleteContactPdss(id); // TODO :: Can be removed by define Foreign Key.. Maybe??
                 deleteContact(id);
             }
         });
