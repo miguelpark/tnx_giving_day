@@ -28,7 +28,7 @@ public class PdssRoomDatabaseTest {
     }
 
     @Test
-    public void test() {
+    public void testSimple() {
 
         long firstAddTs = System.currentTimeMillis();
 
@@ -66,6 +66,49 @@ public class PdssRoomDatabaseTest {
         ret.forEach(d -> Log.d(TAG, d.toString()));
 
 
+    }
+
+    @Test
+    public void testForeignKeyDelete() {
+        //init Add
+        Log.d(TAG,"init add contact");
+        List<PdssSyncData> ret = dao.getPdssSyncDataList(() -> {
+            ArrayList<DeviceContact> list = new ArrayList<>();
+            list.add(new DummyContact(1, "A A", 1));
+            list.add(new DummyContact(2, "B B", 1));
+            list.add(new DummyContact(3, "A B C", 1));
+            return list;
+        }, this::genToolFunc);
+
+        ret.forEach(d -> Log.d(TAG, d.toString()));
+
+        Log.d(TAG,"removed 'B B', 'A B C' ");
+        ret = dao.getPdssSyncDataList(() -> {
+            ArrayList<DeviceContact> list = new ArrayList<>();
+            list.add(new DummyContact(1, "A A", 2));
+            return list;
+        }, this::genToolFunc);
+
+        ret.forEach(d -> Log.d(TAG, d.toString()));
+
+        dao.getCurrentConvertedTable().forEach(d -> Log.d(TAG, d.toString()));
+
+    }
+
+    @Test
+    public void testLargeData() {
+
+        long ts = System.currentTimeMillis();
+        Log.d(TAG,"testLargeData");
+        List<PdssSyncData> ret = dao.getPdssSyncDataList(() -> {
+            ArrayList<DeviceContact> list = new ArrayList<>();
+            for(int i = 0; i < 1000; i++)
+                list.add(new DummyContact(i, "WHAT HI " + i, 1));
+            return list;
+        }, this::genToolFunc);
+
+        Log.d(TAG, "testLargeData done :: " + ret.size() +", "+ (System.currentTimeMillis() - ts));
+        ret.forEach(s -> Log.d(TAG, s.toString()));
     }
 
     private List<String> genToolFunc(String inputString) {

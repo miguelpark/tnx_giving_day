@@ -72,7 +72,7 @@ public abstract class ContactDao {
         int[] ids = getSavedContactIds();
         Arrays.stream(ids).forEach(id -> {
             if(!deviceContactList.stream().anyMatch(deviceContact -> deviceContact.getContactId() == id)) {
-                deleteContactPdss(id); // TODO :: Can be removed by define Foreign Key.. Maybe??
+//                deleteContactPdss(id); // TODO :: Can be removed by define Foreign Key.. Maybe??
                 deleteContact(id);
             }
         });
