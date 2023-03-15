@@ -65,8 +65,6 @@ public class PushMessageHandleService extends Service {
     }
 
     private void showNotificationAndPopupWindow(String message) {
-//        mMessages.add(message);
-
         createNotificationChannel();
 
         Intent popupIntent = new Intent(getApplicationContext(), PopupActivity.class);
@@ -96,7 +94,6 @@ public class PushMessageHandleService extends Service {
 
         Notification summaryNotification = summaryBuilder.build();
         notificationManager.notify(SUMMARY_ID, summaryNotification);
-//        }
     }
 
     private void createNotificationChannel() {
